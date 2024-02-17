@@ -1,0 +1,40 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "C:\\Users\\samue\\Desktop\\Kings\\Intermediate-Solidity-Projects\\SmartContractManagement\\frontend\\contracts\\Master.sol": {
+      "lastModificationDate": 1707614490229,
+      "contentHash": "fb9b251b625b7c848b269bed730f2ce7",
+      "sourceName": "contracts/Master.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.19"
+      ],
+      "artifacts": [
+        "MasterToken"
+      ]
+    }
+  }
+}
