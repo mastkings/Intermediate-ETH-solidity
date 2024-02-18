@@ -1,4 +1,4 @@
-# Eth DOG Token projects 3
+# Eth Master Token project
 
 This is the third project in Eth DOG Token Project 3, I am tasked to create a smart contract to create my own token on a local HardHat network. Once I have created the contract, I should be able to use Remix to interact with it. From remix, the contract owner should be able to mint tokens to a provided address. Any user should be able to burn and transfer tokens.
 
