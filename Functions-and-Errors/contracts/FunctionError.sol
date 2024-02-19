@@ -1,61 +1,75 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.19;
 
-// Define a contract for handling errors through revert conditions and events for deposit and withdrawal actions
+/**
+ * @title Error Handling Contract
+ * @dev This contract demonstrates error handling in Solidity using custom errors, events, and require statements.
+ * It allows for depositing and withdrawing Ether and includes basic arithmetic operations with error checks.
+ */
 contract ErrorHandling {
-    // State variable to keep track of the contract's balance
-    uint public contractBalance = 0;
+    /// @notice Tracks the Ether balance stored in this contract
+    uint256 public contractBalance;
 
-    // Events to log deposit and withdrawal actions
-    event Deposited(uint amount);
-    event Withdrawn(uint amount);
+    /// @dev Emitted when Ether is deposited into the contract
+    event Deposit(uint256 amount);
 
-    // Custom errors for specific revert conditions
-    error ZeroAmountError(string message);
-    error InsufficientBalanceError(string message);
+    /// @dev Emitted when Ether is withdrawn from the contract
+    event Withdrawal(uint256 amount);
+
+    /// @notice Custom error for attempting an operation with a zero amount
+    error ZeroAmountError();
+
+    /// @notice Custom error for insufficient balance during withdrawal
+    error InsufficientBalanceError();
+
+    /// @notice Custom error for division operations where the denominator is zero
     error DivisionByZeroError();
 
-    // Allows a user to deposit a non-zero amount into the contract
-    function deposit(uint amount) public {
-        if (amount == 0) {
-            revert ZeroAmountError("Deposit amount must be greater than zero");
-        }
+    /**
+     * @notice Deposits Ether into the contract
+     * @param amount The amount of Ether to deposit
+     */
+    function deposit(uint256 amount) external {
+        require(amount > 0, "Deposit amount must be greater than zero");
         contractBalance += amount;
-        emit Deposited(amount);  // Emit an event when a deposit occurs
+        emit Deposit(amount);
     }
 
-    // Allows a user to withdraw a non-zero amount if the contract has sufficient balance
-    function withdraw(uint amount) public {
-        if (amount == 0) {
-            revert ZeroAmountError("Withdrawal amount must be greater than zero");
-        }
-        if (amount > contractBalance) {
-            revert InsufficientBalanceError("Insufficient balance for withdrawal");
-        }
+    /**
+     * @notice Withdraws Ether from the contract
+     * @param amount The amount of Ether to withdraw
+     */
+    function withdraw(uint256 amount) external {
+        require(amount > 0, "Withdrawal amount must be greater than zero");
+        require(amount <= contractBalance, "Insufficient balance for withdrawal");
         contractBalance -= amount;
-        emit Withdrawn(amount);  // Emit an event when a withdrawal occurs
+        emit Withdrawal(amount);
     }
 
-    // Divides two numbers and ensures that the denominator is not zero
-    function divide(uint numerator, uint denominator) public pure returns (uint) {
-        if (denominator == 0) {
-            revert DivisionByZeroError();  // Revert if attempting to divide by zero
-        }
+    /**
+     * @notice Divides one number by another
+     * @param numerator The numerator in the division
+     * @param denominator The denominator in the division
+     * @return The result of the division
+     */
+    function divide(uint256 numerator, uint256 denominator) external pure returns (uint256) {
+        require(denominator != 0, "Cannot divide by zero");
         return numerator / denominator;
     }
 
-    // Ensures the contract balance is never negative, which should be impossible
-    function checkInvariant() public view {
-        // Asserting an invariant: The contract balance should never be negative
+    /**
+     * @notice Ensures the contract's balance is never negative
+     * @dev This function uses assert for invariant checking as the balance should never be negative
+     */
+    function checkInvariant() external view {
         assert(contractBalance >= 0);
     }
 
-    // Demonstrates the use of revert to enforce certain conditions
-    function conditionalRevert(bool condition) public pure {
-        // Demonstrate a practical use of revert with a condition
-        if (condition) {
-            revert("Condition was true, transaction reverted");
-        }
+    /**
+     * @notice Demonstrates a conditional revert
+     * @param condition The condition to evaluate
+     */
+    function conditionalRevert(bool condition) external pure {
+        require(!condition, "Condition was true, transaction reverted");
     }
 }
