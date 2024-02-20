@@ -1,75 +1,55 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.19;
 
 /**
- * @title Error Handling Contract
- * @dev This contract demonstrates error handling in Solidity using custom errors, events, and require statements.
- * It allows for depositing and withdrawing Ether and includes basic arithmetic operations with error checks.
+ * @title Error Handling in Solidity
+ * @dev This contract demonstrates basic error handling patterns in Solidity using require, assert, and revert. 
+ * It includes functions for depositing and withdrawing funds with checks to ensure transactions are valid. 
+ * Additionally, it showcases safe division operations and conditions that trigger assertions and reverts for 
+ * error handling and debugging purposes. The contract is designed for educational use, illustrating how to 
+ * manage and respond to common error scenarios in smart contract development.
+ *
+ * Functions:
+ * - depositRequire: Adds a specified amount to the contract's funds, requiring the amount to be greater than zero.
+ * - withdrawRequire: Withdraws a specified amount from the contract's funds, requiring the amount to be positive and available.
+ * - divideRequire: Performs division between two numbers, requiring the denominator to be non-zero to avoid division by zero errors.
+ * - assertFunction: Demonstrates the use of the assert statement for internal error checking, using a division operation as an example.
+ * - revertFunction: Demonstrates the use of the revert statement to manually revert transactions under specific conditions.
  */
 contract ErrorHandling {
-    /// @notice Tracks the Ether balance stored in this contract
-    uint256 public contractBalance;
+    uint public funds; // Total funds available in the contract
 
-    /// @dev Emitted when Ether is deposited into the contract
-    event Deposit(uint256 amount);
-
-    /// @dev Emitted when Ether is withdrawn from the contract
-    event Withdrawal(uint256 amount);
-
-    /// @notice Custom error for attempting an operation with a zero amount
-    error ZeroAmountError();
-
-    /// @notice Custom error for insufficient balance during withdrawal
-    error InsufficientBalanceError();
-
-    /// @notice Custom error for division operations where the denominator is zero
-    error DivisionByZeroError();
-
-    /**
-     * @notice Deposits Ether into the contract
-     * @param amount The amount of Ether to deposit
-     */
-    function deposit(uint256 amount) external {
-        require(amount > 0, "Deposit amount must be greater than zero");
-        contractBalance += amount;
-        emit Deposit(amount);
+    // Function to deposit an amount, requiring the amount to be greater than zero
+    function depositRequire(uint _amount) public {
+        require(_amount > 0, "Amount must exceed zero");
+        funds += _amount;
     }
 
-    /**
-     * @notice Withdraws Ether from the contract
-     * @param amount The amount of Ether to withdraw
-     */
-    function withdraw(uint256 amount) external {
-        require(amount > 0, "Withdrawal amount must be greater than zero");
-        require(amount <= contractBalance, "Insufficient balance for withdrawal");
-        contractBalance -= amount;
-        emit Withdrawal(amount);
+    // Function to withdraw an amount, requiring the withdrawal to be positive and not exceed available funds
+    function withdrawRequire(uint _amount) public {
+        require(_amount > 0, "Withdrawal must be positive");
+        require(_amount <= funds, "Cannot exceed available funds");
+        funds -= _amount;
     }
 
-    /**
-     * @notice Divides one number by another
-     * @param numerator The numerator in the division
-     * @param denominator The denominator in the division
-     * @return The result of the division
-     */
-    function divide(uint256 numerator, uint256 denominator) external pure returns (uint256) {
-        require(denominator != 0, "Cannot divide by zero");
-        return numerator / denominator;
+    // Function to safely divide two numbers, requiring the denominator to be non-zero
+    function divideRequire(uint _numerator, uint _denominator) public pure returns (uint) {
+        require(_denominator != 0, "Denominator cannot be zero");
+        return _numerator / _denominator;
     }
 
-    /**
-     * @notice Ensures the contract's balance is never negative
-     * @dev This function uses assert for invariant checking as the balance should never be negative
-     */
-    function checkInvariant() external view {
-        assert(contractBalance >= 0);
+    // Function demonstrating the use of the assert statement for internal checks
+    function assertFunction() public pure {
+        uint result = divideRequire(10, 2);
+        assert(result == 5);
     }
 
-    /**
-     * @notice Demonstrates a conditional revert
-     * @param condition The condition to evaluate
-     */
-    function conditionalRevert(bool condition) external pure {
-        require(!condition, "Condition was true, transaction reverted");
+    // Function demonstrating the use of the revert statement to manually revert transactions under specific conditions
+    function revertFunction() public pure {
+        uint result = divideRequire(10, 2);
+        if(result != 5){
+            revert("Revert on specific condition");
+        }
     }
 }
