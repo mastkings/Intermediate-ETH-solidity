@@ -2,21 +2,6 @@
 
 pragma solidity ^0.8.19;
 
-/**
- * @title Error Handling in Solidity
- * @dev This contract demonstrates basic error handling patterns in Solidity using require, assert, and revert. 
- * It includes functions for depositing and withdrawing funds with checks to ensure transactions are valid. 
- * Additionally, it showcases safe division operations and conditions that trigger assertions and reverts for 
- * error handling and debugging purposes. The contract is designed for educational use, illustrating how to 
- * manage and respond to common error scenarios in smart contract development.
- *
- * Functions:
- * - depositRequire: Adds a specified amount to the contract's funds, requiring the amount to be greater than zero.
- * - withdrawRequire: Withdraws a specified amount from the contract's funds, requiring the amount to be positive and available.
- * - divideRequire: Performs division between two numbers, requiring the denominator to be non-zero to avoid division by zero errors.
- * - assertFunction: Demonstrates the use of the assert statement for internal error checking, using a division operation as an example.
- * - revertFunction: Demonstrates the use of the revert statement to manually revert transactions under specific conditions.
- */
 contract ErrorHandling {
     uint public funds; // Total funds available in the contract
 
